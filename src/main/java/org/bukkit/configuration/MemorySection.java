@@ -2,6 +2,7 @@ package org.bukkit.configuration;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -716,6 +717,30 @@ public class MemorySection implements ConfigurationSection {
         }
         
         return result;
+    }
+
+    public <T> List<T> getSpecificList(String path, Class<T> returntype) {
+        return getSpecificList(path, returntype, null);
+    }
+
+    public <T> List<T> getSpecificList(String path, Class<T> returntype, List<T> def) {
+        if (path == null) {
+            throw new IllegalArgumentException("Path cannot be null");
+        }
+
+        List<Object> list = getList(path);
+        List<T> result = new ArrayList<T>();
+
+        for (Object object : list) {
+            if (object.getClass().isAssignableFrom(returntype)) {
+                try {
+                    result.add(returntype.cast(object));
+                } catch (ClassCastException e) {
+                }
+            }
+        }
+
+        return (!result.isEmpty()) ? result : def;
     }
 
     public List<Map<String, Object>> getMapList(String path) {

@@ -526,6 +526,35 @@ public interface ConfigurationSection {
     public List<Short> getShortList(String path);
 
     /**
+     * Gets the requested List (of any type!) by path, returning null if not found.
+     * <p>
+     * The type of the list is specified the argument "returntype"
+     * <p>
+     * If the List does not exist then the specified default value will returned
+     * regardless of if a default has been identified in the root {@link Configuration}.
+     *
+     * @param path Path of the List to get.
+     * @param returntype The type of values that are stored in the list
+     * @return Requested List.
+     */
+    public <T> List<T> getSpecificList(String path, Class<T> returntype);
+
+    /**
+     * Gets the requested List (of any type!) by path, returning a default value if not found.
+     * <p>
+     * The type of the list is specified by the argument "returntype"
+     * <p>
+     * If the List does not exist then the specified default value will returned
+     * regardless of if a default has been identified in the root {@link Configuration}.
+     *
+     * @param path Path of the List to get.
+     * @param returntype The type of values that are stored in the list
+     * @param def Default value
+     * @return Requested List.
+     */
+    public <T> List<T> getSpecificList(String path, Class<T> returntype, List<T> def);
+
+    /**
      * Gets the requested List of Maps by path.
      * <p>
      * If the List does not exist but a default value has been specified, this
